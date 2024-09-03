@@ -1,0 +1,16 @@
+.UserTop img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.UserTop .user-link {
+    text-decoration: none;
+    color: white;
+    transition: color 0.5s ease;
+}
+
+.UserTop .user-link:hover {
+    color: gray;
+    text-decoration: dashed;
+}
