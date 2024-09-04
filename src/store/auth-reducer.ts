@@ -2,30 +2,40 @@ import { createAction, createAsyncThunk, createReducer, createSlice, PayloadActi
 import { Credentials, UserProfile } from '../types/user.types'
 import { AuthApi } from '../api/auth-api'
 import { createAppAsyncThunk, GetThunkState, ThunkType } from './withTypes'
+import { AxiosError } from 'axios'
 
+interface FileType {
+  fileName: string | null;
+  fileUrl: string | null;
+}
 
 interface AuthState {
     authThunk: ThunkType
     authMeThunk: ThunkType
     logoutThunk: ThunkType
+    registerThunk: ThunkType
     login: string 
     password: string
     isAuthorized: boolean
-    loading: boolean;
-    error: string | null   
     user: UserProfile | null 
+    username: string
+    birthDate: string | null
+
+    filePreview: string | null
 }
 
 const authState: AuthState = {
     authThunk: GetThunkState(),
     authMeThunk: GetThunkState(),
     logoutThunk: GetThunkState(),
+    registerThunk: GetThunkState(),
     login: "",
     password: "",
     isAuthorized: false,
-    loading: false,
-    error: null,
-    user: null
+    user: null,
+    username: "",
+    birthDate: null,
+    filePreview: null
 }
 
 export const auth = createAppAsyncThunk<UserProfile, Credentials>(
@@ -46,6 +56,15 @@ export const authMe = createAppAsyncThunk<UserProfile>(
     }
 ) 
 
+export const register = createAppAsyncThunk<UserProfile, FormData>(
+  'auth/register-thunk',
+  async (formData: FormData) => {
+    const result = await AuthApi.register(formData)
+
+    return result
+  }
+)
+
 export const logout = createAppAsyncThunk(
   'auth/logout-thunk',
   async () => {
@@ -57,12 +76,29 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState: authState,
     reducers: {
+        setFilePreview(state, action: PayloadAction<string>) {
+          state.filePreview = action.payload
+          state.registerThunk.error = null
+        },
+
+        setDate(state, action: PayloadAction<string>) {
+          state.birthDate = action.payload
+          state.registerThunk.error = null
+        },
+
+        setUsername(state, action: PayloadAction<string>) {
+          state.username = action.payload
+          state.registerThunk.error = null
+        },
+
         setLogin(state, action: PayloadAction<string>) {
             state.login = action.payload
+            state.authThunk.error = null
         },
 
         setPassword(state, action: PayloadAction<string>) {
             state.password = action.payload
+            state.authThunk.error = null
         },
     },
     extraReducers: builder => {
@@ -77,7 +113,7 @@ export const authSlice = createSlice({
           })
           .addCase(auth.rejected, (state, action) => {
             state.authThunk.status = 'rejected'
-            state.error = action.error.message ?? 'Unknown Error'
+            state.authThunk.error = action.error.message ?? 'Unknown Error'
           })
 
           .addCase(authMe.fulfilled, (state, action) => {
@@ -105,7 +141,20 @@ export const authSlice = createSlice({
             state.logoutThunk.status = 'rejected'
             state.logoutThunk.error = action.error.message ?? 'Unknown Error'
           })
+
+          .addCase(register.fulfilled, (state, action) => {
+            state.registerThunk.status = 'succeeded'
+            state.isAuthorized = true
+            state.user = action.payload
+          })
+          .addCase(register.pending, (state, action) => {
+            state.registerThunk.status = 'pending'
+          })
+          .addCase(register.rejected, (state, action) => {
+            state.registerThunk.status = 'rejected'
+            state.registerThunk.error = action.error.message ?? 'Unknown Error'
+          })
       }
 })
 
-export const {setLogin, setPassword} = authSlice.actions
+export const {setLogin, setPassword, setDate, setUsername, setFilePreview} = authSlice.actions

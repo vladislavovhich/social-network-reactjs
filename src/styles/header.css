@@ -1,4 +1,7 @@
 .Header {
     border-bottom: 0.01em solid rgba(142, 141, 141, 0.4);
     height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 1; 
 }

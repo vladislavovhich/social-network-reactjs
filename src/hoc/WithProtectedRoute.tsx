@@ -8,19 +8,19 @@ interface WithAuthRedirectProps {
   redirectTo: string;
 }
 
-const withAuthRedirect = (WrappedComponent: React.ComponentType<any>, redirectTo: string) => {
+const WithProtectedRoute = (WrappedComponent: React.ComponentType<any>) => {
     return (props: any) => {
         const navigate = useNavigate();
         const isAuthorized = useSelector((state: RootState) => state.auth.isAuthorized);
 
         useEffect(() => {
-            if (isAuthorized) {
-                navigate(redirectTo)
+            if (!isAuthorized) {
+                navigate('/login')
             }
-        }, [isAuthorized, navigate, redirectTo]);
+        }, [isAuthorized, navigate]);
 
-        return !isAuthorized ? <WrappedComponent {...props} /> : null;
+        return isAuthorized ? <WrappedComponent {...props} /> : null;
     };
 };
 
-export default withAuthRedirect;
+export default WithProtectedRoute;

@@ -6,6 +6,7 @@ import {setLogin, setPassword } from '../../store/auth-reducer';
 import { auth as authThunk } from '../../store/auth-reducer';
 
 const Login: React.FC = () => {
+    const loginError = useSelector((state: RootState) => state.auth.authThunk.error)
     const login = useSelector((state: RootState) => state.auth.login)
     const password = useSelector((state: RootState) => state.auth.password)
 
@@ -50,12 +51,17 @@ const Login: React.FC = () => {
               onChange={handlePasswordChange}
               />
           </div>
+          {
+            loginError && (
+              <div className='text text-danger mt-2'>{loginError}</div>
+            )
+          }
           <input 
-          type='button' 
-          className='btn btn-info mt-3 col-5' 
-          value="Sign in" 
-          data-bs-theme="dark"
-          onClick={check}
+            type='button' 
+            className='btn btn-info mt-3 col-5' 
+            value="Sign in" 
+            data-bs-theme="dark"
+            onClick={check}
           />
         </form>
       </div>

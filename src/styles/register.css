@@ -1,0 +1,10 @@
+.img-pfp {
+    width: 95px;
+    height: 95px;
+    border-radius: 50%;
+    border: 1px solid white;
+}
+
+.file-upload-btn {
+    height: 40px;
+}
