@@ -1,0 +1,65 @@
+.user-pfp {
+    width: 115px;
+    height: 115px;
+    border-radius: 50%;
+}
+
+.user-info-framed {
+    background-color: rgba(51, 57, 63, 0.644);
+    padding: 5px 10px;
+    border-radius: 15px;
+}
+
+.group-list-item:not(:first-child) {
+    margin-top: 15px;
+}
+
+.user-pfp-link:not(:first-child):not(:last-child) {
+    margin-left: 15px;
+}
+
+.user-pfp-link:last-child {
+    margin-left: 15px;
+}
+
+.user-info-group-img {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+}
+
+.user-info-group-link {
+    text-decoration: none;
+    color: white;
+    transition: color 0.5s ease;
+}
+
+.user-info-group-link:hover {
+    color: gray;
+    text-decoration: dashed;
+}
+
+.user-pfp-link {
+    color: white;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-radius: 30px;
+    color: white;
+    text-decoration: none;
+}
+
+.user-pfp-active-link {
+    background-color: rgba(100, 112, 122, 0.644);
+}
+
+.user-pfp-not-active-link {
+    background-color: rgba(52, 58, 63, 0.644);
+
+}
+
+
+.user-pfp-nav-btn .icon {   
+    font-size: 15px;
+}

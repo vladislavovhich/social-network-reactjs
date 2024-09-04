@@ -10,6 +10,8 @@ import store from './store/store';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import withAuthRedirect from './hoc/WithAuthRedirect';
+import UserProfile from './components/user/UserProfile';
+import GroupList from './components/group/GroupList';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -30,6 +32,40 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <RegisterPage />
+      },
+      {
+        path: "/profile",
+        element: <UserProfile />,
+        children: [
+          {
+            path: "/profile/groups",
+            element: <GroupList />
+          },
+          {
+            path: "/profile/friends",
+            element: <div>Groups</div>
+          },
+          {
+            path: "/profile/requests",
+            element: <div>Requests</div>
+          },
+          {
+            path: "/profile/comments",
+            element: <div>Comments</div>
+          },
+          {
+            path: "/profile/posts",
+            element: <div>Posts</div>
+          },
+          {
+            path: "/profile/settings",
+            element: <div>Settings</div>
+          }
+        ]
+      },
+      {
+        path: "/profile/:userId",
+        element: <UserProfile />
       }
     ]
   },

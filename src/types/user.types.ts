@@ -19,10 +19,11 @@ export type UserProfile = {
     id: number,
     username: string,
     email: string,
-    birthDate: Date,
-    created_at: Date,
+    birthDate: string,
+    created_at: string,
     pfp: Pfp
     groups: Group[]
+    isVerified: boolean
 }
 
 export type Credentials = {

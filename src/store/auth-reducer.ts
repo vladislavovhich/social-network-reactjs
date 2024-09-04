@@ -4,11 +4,6 @@ import { AuthApi } from '../api/auth-api'
 import { createAppAsyncThunk, GetThunkState, ThunkType } from './withTypes'
 import { AxiosError } from 'axios'
 
-interface FileType {
-  fileName: string | null;
-  fileUrl: string | null;
-}
-
 interface AuthState {
     authThunk: ThunkType
     authMeThunk: ThunkType
@@ -20,7 +15,6 @@ interface AuthState {
     user: UserProfile | null 
     username: string
     birthDate: string | null
-
     filePreview: string | null
 }
 
