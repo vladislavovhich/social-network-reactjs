@@ -12,6 +12,8 @@ import Register from './components/auth/Register';
 import withAuthRedirect from './hoc/WithAuthRedirect';
 import UserProfile from './components/user/UserProfile';
 import GroupList from './components/group/GroupList';
+import Group from './components/group/Group';
+import ErrorPage from './components/common/Error';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -26,12 +28,20 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
+        path: "/error",
+        element: <ErrorPage />
+      },
+      {
         path: "/login",
         element: <LoginPage />
       },
       {
         path: "/register",
         element: <RegisterPage />
+      },
+      {
+        path: "/groups/:groupId",
+        element: <Group />
       },
       {
         path: "/profile",

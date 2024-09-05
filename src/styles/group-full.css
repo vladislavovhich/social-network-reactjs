@@ -1,0 +1,29 @@
+.group-pfp {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.group-link {
+    color: white;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-radius: 30px;
+    color: white;
+    text-decoration: none;
+    background-color: rgba(52, 58, 63, 0.644);
+    border-color: rgba(52, 58, 63, 0.644);
+    transition: background-color 0.5s ease;
+    vertical-align: middle
+}
+
+.group-link:hover {
+    background-color: rgba(100, 112, 122, 0.644);
+}
+
+.text-gr-dark {
+    color: rgb(113, 113, 113)
+}

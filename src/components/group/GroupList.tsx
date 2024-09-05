@@ -10,12 +10,17 @@ const GroupList = () => {
     return (
         <div>
             {
-                groups.map(group => 
-                    <GroupOne 
-                        id={group.id} 
-                        name={group.name} 
-                        pfp={group.pfp}
-                    />
+                groups.map((group, index) => 
+                    <>
+                        <GroupOne 
+                            id={group.id} 
+                            name={group.name} 
+                            pfp={group.pfp}
+                            key={index.toString()}
+                        />
+
+                        {index <= groups.length && <div className='hr mt-3'/>}
+                    </> 
                 )
             }
         </div>

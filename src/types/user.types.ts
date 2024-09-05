@@ -1,3 +1,4 @@
+import { Group } from "./group.types"
 
 export type LoginType = {
     email: string
@@ -9,10 +10,11 @@ export type Pfp = {
     url: string
 } | null
 
-export type Group = {
-    id: number
-    name: string
-    pfp: Pfp 
+export type UserOne = {
+    id: 0,
+    username: string,
+    pfp: Pfp
+    isVerified: boolean
 }
 
 export type UserProfile = {
@@ -32,7 +34,6 @@ export type Credentials = {
 }
 
 export interface ErrorResponse {
-    
-    status: number
+    statusCode: number
     message: string
 }
