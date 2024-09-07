@@ -7,9 +7,9 @@ html{
 }
 
 .sidebar {
-    width: 350px;
-    color: white;
-    position: sticky;
-    top: 0;
-    overflow-y: auto;
+    width:320px;
+}
+
+.body {
+    flex-grow: 1;
 }

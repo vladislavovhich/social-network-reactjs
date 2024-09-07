@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { GroupFull, GroupRule } from "../types/group.types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { GroupFull, GroupPost, GroupRule, PostSearchParams, SearchPostsThunkParams } from "../types/group.types";
 import { createAppAsyncThunk, GetThunkState, ThunkType } from "./withTypes";
 import { GroupApi } from "../api/group-api";
 import { UserOne } from "../types/user.types";
@@ -11,15 +11,29 @@ interface IGroupState {
     getGroupThunk: ThunkType
     getModeratorsThunk: ThunkType
     getRulesThunk: ThunkType
+    getPostsThunk: ThunkType
+    postDateBy: string | null
+    postSortBy: string | null
+    postsPage: number
+    postsPageSize: number
+    postsNextPage: number | null
+    posts: GroupPost[]
 }
 
 const groupState: IGroupState = {
     group: null,
     rules: null,
     moderators: null,
+    postDateBy: null,
+    postSortBy: null,
+    posts: [],
+    postsPage: 1,
+    postsPageSize: 5,
+    postsNextPage: null,
     getGroupThunk: GetThunkState(),
     getModeratorsThunk: GetThunkState(),
     getRulesThunk: GetThunkState(),
+    getPostsThunk: GetThunkState()
 }
 
 export const getGroup = createAppAsyncThunk<GroupFull, number>(
@@ -49,11 +63,29 @@ export const getRules = createAppAsyncThunk<GroupRule[], number>(
     }
 )
 
+export const getPosts = createAppAsyncThunk(
+    'group/get-posts',
+    async (data: SearchPostsThunkParams, {getState}) => {
+        const {groupId, params} = data
+
+        const paginationResponse = await GroupApi.getGroupPosts(groupId, params)
+
+        return {data: paginationResponse, setEmptyPosts: data.setPostsEmpty}
+    }
+)
 export const groupSlice = createSlice({
     name: 'group',
     initialState: groupState,
     reducers: {
-
+        setPostsDateBy(state, action: PayloadAction<string | null>) {
+            state.postDateBy = action.payload
+        },
+        setPostsSortBy(state, action: PayloadAction<string | null>) {
+            state.postSortBy = action.payload
+        },
+        setPosts(state, action: PayloadAction<[]>) {
+            state.posts = action.payload
+        }
     },
     
     extraReducers: builder => {
@@ -101,5 +133,33 @@ export const groupSlice = createSlice({
                 state.getRulesThunk.status = 'rejected'
                 state.getRulesThunk.error = action.error.message ?? 'Unknown Error'
             })
+
+
+            .addCase(getPosts.pending, (state, action) => {
+                state.getPostsThunk.status = 'pending'
+            })
+
+            .addCase(getPosts.fulfilled, (state, action) => {
+                state.getPostsThunk.status = 'succeeded'
+
+                if (action.payload.setEmptyPosts) {
+                    state.posts = action.payload.data.items
+                } else {
+                    state.posts = [...state.posts, ...action.payload.data.items]
+                }
+                
+                if (action.payload.data.nextPage) {
+                    state.postsNextPage = action.payload.data.nextPage
+                } else {
+                    state.postsNextPage = null
+                }
+            })
+
+            .addCase(getPosts.rejected, (state, action) => {
+                state.getPostsThunk.status = 'rejected'
+                state.getPostsThunk.error = action.error.message ?? 'Unknown Error'
+            })
     }
 })
+
+export const {setPostsSortBy, setPostsDateBy, setPosts} = groupSlice.actions
