@@ -2,9 +2,7 @@ import React, { ChangeEvent, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
-import { setPosts, setPostsDateBy, setPostsSortBy } from '../../store/group-reducer';
-import { getPosts as getPostsThunk } from '../../store/group-reducer';
-import { group } from 'console';
+import { setPosts, setPostsDateBy, setPostsSortBy, getPosts } from '../../store/reducers/post.slice';
 import { SearchPostsThunkParams } from '../../types/group.types';
 
 interface Props {
@@ -14,7 +12,7 @@ interface Props {
 const GroupPostFilter = (props: Props) => {
     const {groupId} = props
 
-    const {postDateBy, postSortBy, postsPage, postsPageSize} = useSelector((state: RootState) => state.group)
+    const {postDateBy, postSortBy, postsPage, postsPageSize} = useSelector((state: RootState) => state.post)
 
     const dispatch = useDispatch<AppDispatch>()
 
@@ -31,14 +29,14 @@ const GroupPostFilter = (props: Props) => {
             params: {
                 page: postsPage,
                 pageSize: postsPageSize,
-                date: postDateBy ? postDateBy : "today",
-                post: postSortBy ? postSortBy : "now"
+                date: postDateBy,
+                post: postSortBy
             },
             groupId: groupId,
             setPostsEmpty: true
         }
 
-        dispatch(getPostsThunk(params))
+        dispatch(getPosts(params))
     }
 
     return (

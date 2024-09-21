@@ -4,20 +4,20 @@ import "../styles/common.css"
 import { Outlet } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store/store';
-import { authMe as authMeThunk } from '../store/auth-reducer';
+import { authMe } from '../store/reducers/auth.slice';
 import Header from './common/Header';
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
-    dispatch(authMeThunk())
+    dispatch(authMe())
   }, [dispatch])
 
   return (
     <div className="App bg-dark">
       <Header />
-      <main className='mt-3'>
+      <main className='mt-3 mb-3'>
         <div className='container'>
           <Outlet />
         </div>

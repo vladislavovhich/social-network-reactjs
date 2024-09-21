@@ -1,8 +1,7 @@
 import { createAction, createAsyncThunk, createReducer, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Credentials, UserProfile } from '../types/user.types'
-import { AuthApi } from '../api/auth-api'
-import { createAppAsyncThunk, GetThunkState, ThunkType } from './withTypes'
-import { AxiosError } from 'axios'
+import { Credentials, UserProfile } from '../../types/user.types'
+import { AuthApi } from '../../api/auth-api'
+import { createAppAsyncThunk, GetThunkState, ThunkType } from '../withTypes'
 
 interface AuthState {
     authThunk: ThunkType
@@ -15,7 +14,6 @@ interface AuthState {
     user: UserProfile | null 
     username: string
     birthDate: string | null
-    filePreview: string | null
 }
 
 const authState: AuthState = {
@@ -29,7 +27,6 @@ const authState: AuthState = {
     user: null,
     username: "",
     birthDate: null,
-    filePreview: null
 }
 
 export const auth = createAppAsyncThunk<UserProfile, Credentials>(
@@ -70,11 +67,6 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState: authState,
     reducers: {
-        setFilePreview(state, action: PayloadAction<string>) {
-          state.filePreview = action.payload
-          state.registerThunk.error = null
-        },
-
         setDate(state, action: PayloadAction<string>) {
           state.birthDate = action.payload
           state.registerThunk.error = null
@@ -151,4 +143,4 @@ export const authSlice = createSlice({
       }
 })
 
-export const {setLogin, setPassword, setDate, setUsername, setFilePreview} = authSlice.actions
+export const {setLogin, setPassword, setDate, setUsername} = authSlice.actions

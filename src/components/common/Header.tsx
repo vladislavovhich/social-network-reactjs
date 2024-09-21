@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
 import { Link } from 'react-router-dom';
 import { UserTop } from '../user/UserTop';
-import { logout as logoutThunk } from '../../store/auth-reducer';
+import { logout as logoutThunk } from '../../store/reducers/auth.slice';
 
 const Header = () => {
     const dispatch = useDispatch<AppDispatch>()
@@ -17,18 +17,12 @@ const Header = () => {
         dispatch(logoutThunk())
     }
   
-
     return (
         <header className='bg-dark Header'>
             <div className='container'>
                 <nav className="navbar navbar-dark justify-content-between">
                     <a className="navbar-brand" href="#">SocialNetwork</a>
-
-                    <div className='d-flex flex-row'>
-                        <input className="form-control" type="search" placeholder="Search" aria-label="Search" data-bs-theme="dark"/>
-                        <input className="btn btn-danger ms-2" type="button" value="Search" />
-                    </div>
-
+                    
                     <div className='d-flex flex-row'>
                         {
                             (!isAuthorized && !user) ? (

@@ -1,22 +1,37 @@
 import React, { useEffect } from 'react';
-import ReactDOM from 'react-dom/client';
-import { useSelector } from 'react-redux';
+import ReactDOM, { Root } from 'react-dom/client';
+import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, redirect, useParams } from 'react-router-dom';
-import { RootState } from '../../store/store';
+import { AppDispatch, RootState } from '../../store/store';
 import pfp from "../../images/default_user_pfp.jpg"
 import "../../styles/user-profile.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faCircleExclamation, faCog, faCogs, faComments, faSignsPost, faUserGroup, faUserPlus, faUsersLine } from '@fortawesome/free-solid-svg-icons';
 import UserProfileNavBtn from './UserProfileNavBtn';
+import { getUser, setUser } from '../../store/reducers/user.slice';
+import UserNavBar from './UserNavBar';
 
 const UserProfile = () => {
     const { userId } = useParams();
 
-    const user = useSelector((state: RootState) => state.auth.user)
+    const user = useSelector((state: RootState) => state.user.user)
+    const userAuth = useSelector((state: RootState) => state.auth.user)
+
+    const dispatch = useDispatch<AppDispatch>()
+
+    useEffect(() => {
+        const id = parseInt(userId || "")
+
+        if (userAuth && Number.isNaN(id)) {
+            dispatch(setUser(userAuth))
+        } else if (userAuth && userAuth.id == id) {
+            dispatch(setUser(userAuth))
+        } else {
+            dispatch(getUser(id))
+        }
+    }, [userId, user])
 
     if (!user) {
-        redirect("/login")
-
         return null
     }
 
@@ -24,6 +39,8 @@ const UserProfile = () => {
     const curDate = new Date()
 
     const age = curDate.getFullYear() - birthDate.getFullYear()
+
+    const isOwner = !!(user && userAuth && userAuth.id == user.id)
 
     return (
         <div className='d-flex flex-column'>
@@ -65,43 +82,10 @@ const UserProfile = () => {
             
             <div className='hr'/>
 
-            <div className='d-flex flex-row my-3 justify-content-center'>
-                <UserProfileNavBtn 
-                    text='Groups'
-                    url='/profile/groups'
-                    icon={faUsersLine}
-                />
-
-                <UserProfileNavBtn 
-                    text='Friends'
-                    url='/profile/friends'
-                    icon={faUserGroup}
-                />
-
-                <UserProfileNavBtn 
-                    text='Requests'
-                    url='/profile/requests'
-                    icon={faUserPlus}
-                />
-
-                <UserProfileNavBtn 
-                    text='Posts'
-                    url='/profile/posts'
-                    icon={faSignsPost}
-                />
-
-                <UserProfileNavBtn 
-                    text='Comments'
-                    url='/profile/comments'
-                    icon={faComments}
-                />
-
-                <UserProfileNavBtn 
-                    text='Settings'
-                    url='/profile/settings'
-                    icon={faCogs}
-                />
-            </div>
+            <UserNavBar 
+                isOwner={isOwner} 
+                userId={user.id}            
+            />
 
             <div className='hr'/>
 

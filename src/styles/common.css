@@ -13,3 +13,34 @@ html{
 .body {
     flex-grow: 1;
 }
+
+.text-gr-dark {
+    color: rgb(113, 113, 113)
+}
+
+.tag-add {
+    height: 35px;
+}
+
+.tag-text {
+    background-color: rgba(51, 57, 63, 0.644);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    height: 100%;
+    padding: 5px 10px;
+}
+
+.tag-btn {
+    background-color: rgba(74, 83, 92, 0.644);
+    height: 100%;
+    padding: 5px 10px;
+    border: 1px solid rgba(74, 83, 92, 0.644);
+    outline: none;
+    transition: background-color 0.5s ease;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.tag-btn:hover {
+    background-color: rgba(93, 104, 116, 0.644);
+}

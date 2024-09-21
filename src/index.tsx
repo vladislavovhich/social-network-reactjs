@@ -13,7 +13,11 @@ import withAuthRedirect from './hoc/WithAuthRedirect';
 import UserProfile from './components/user/UserProfile';
 import GroupList from './components/group/GroupList';
 import Group from './components/group/Group';
-import ErrorPage from './components/common/Error';
+import GroupPosts from './components/group/GroupPosts';
+import GroupSuggestPosts from './components/group/GroupSuggestPosts';
+import GroupBannedUsers from './components/group/GroupBannedUsers';
+import PostCreate from './components/post/PostCreate';
+import GroupEdit from './components/group/GroupEdit';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -28,10 +32,6 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "/error",
-        element: <ErrorPage />
-      },
-      {
         path: "/login",
         element: <LoginPage />
       },
@@ -40,31 +40,53 @@ const router = createBrowserRouter([
         element: <RegisterPage />
       },
       {
+        path: "/group-create",
+        element: <GroupEdit />
+      },
+      {
         path: "/groups/:groupId",
-        element: <Group />
+        element: <Group />,
+        children: [
+          {
+            path: "/groups/:groupId/posts",
+            element: <GroupPosts />
+          },
+          {
+            path: "/groups/:groupId/suggest-posts",
+            element: <GroupSuggestPosts />
+          },
+          {
+            path: "/groups/:groupId/banned-users",
+            element: <GroupBannedUsers />
+          },
+          {
+            path: "/groups/:groupId/create-post",
+            element: <PostCreate />
+          }
+        ]
       },
       {
         path: "/profile",
         element: <UserProfile />,
         children: [
           {
-            path: "/profile/groups",
+            path: "/profile/:id/groups",
             element: <GroupList />
           },
           {
-            path: "/profile/friends",
+            path: "/profile/:id/friends",
             element: <div>Groups</div>
           },
           {
-            path: "/profile/requests",
+            path: "/profile/:id/requests",
             element: <div>Requests</div>
           },
           {
-            path: "/profile/comments",
+            path: "/profile/:id/comments",
             element: <div>Comments</div>
           },
           {
-            path: "/profile/posts",
+            path: "/profile/:id/posts",
             element: <div>Posts</div>
           },
           {

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { useSelector, useDispatch } from 'react-redux';
-import { setDate, setLogin, setPassword, setUsername, register as registerThunk } from '../../store/auth-reducer';
+import { setDate, setLogin, setPassword, setUsername, register as registerThunk } from '../../store/reducers/auth.slice';
 import { RootState, AppDispatch } from '../../store/store';
 import "../../styles/register.css"
 import * as Yup from 'yup';
@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import FormField from './FormField';
 import FormHeader from './FormHeader';
 import FormFileField from './FormFileField';
+import Spinner from 'react-bootstrap/Spinner'
 
 const FormSchema = Yup.object({
     username: Yup.string().min(5).required(),
@@ -27,17 +28,17 @@ interface IForm {
 
 const Register = () => {
     const {login, password, birthDate, username} = useSelector((state: RootState) => state.auth)
-    const error = useSelector((state: RootState) => state.auth.registerThunk.error)
+    const {fileOne: file} = useSelector((state: RootState) => state.file)
+
+    const {error, status} = useSelector((state: RootState) => state.auth.registerThunk)
     const dispatch = useDispatch<AppDispatch>()
 
-    const [file, setFile] = useState<File | null>(null)
-
-    const { register, handleSubmit, formState: { errors }, reset } = useForm<IForm>({
+    const { register, handleSubmit, formState: { errors }, reset, clearErrors } = useForm<IForm>({
         resolver: yupResolver(FormSchema),
         defaultValues: {email: login, password, username, birthDate: birthDate || ""}
     });
 
-    const formOnSubmit = (data: IForm) => {
+    const formOnSubmit = async (data: IForm) => {
         const formData = new FormData()
         const date = birthDate ? (new Date(birthDate)).toISOString() : (new Date()).toISOString()
 
@@ -45,9 +46,12 @@ const Register = () => {
         formData.append("password", password)
         formData.append("birthDate", date)
         formData.append("username", username)
-
+        
         if (file) {
-            formData.append("file", file)
+            const res = await fetch(file)
+            const blob = await res.blob()
+
+            formData.append("file", blob)
         }
 
         dispatch(registerThunk(formData))
@@ -71,6 +75,7 @@ const Register = () => {
                     id='email'
                     action={setLogin}
                     labelText='Email'
+                    clearError={clearErrors}
                 />
 
                 <FormField 
@@ -83,6 +88,7 @@ const Register = () => {
                     extraClass='mt-1'
                     action={setPassword}
                     labelText='Password'
+                    clearError={clearErrors}
                 />
 
                 <FormHeader 
@@ -97,10 +103,11 @@ const Register = () => {
                     value={birthDate || ""}
                     placeholder='Enter date'
                     error={errors.birthDate}
-                    id='date'
+                    id='birthDate'
                     extraClass='mt-1'
                     action={setDate}
                     labelText='Birth Date'
+                    clearError={clearErrors}
                 />
 
                 <FormField 
@@ -113,9 +120,10 @@ const Register = () => {
                     extraClass='mt-1'
                     action={setUsername}
                     labelText='Username'
+                    clearError={clearErrors}
                 />
 
-                <FormFileField text="Profile Picture" setFile={setFile}/>
+                <FormFileField text="Profile Picture" />
 
                 <span className='hr col-5 my-3'/>
 
@@ -123,12 +131,18 @@ const Register = () => {
                     error && <p className='text-danger'>{error}</p>
                 }
 
-                <input 
-                    type='submit' 
-                    className='btn btn-info col-5' 
-                    value="Sign up" 
-                    data-bs-theme="dark"
-                />
+                {
+                    status == "pending" ? (
+                        <Spinner animation="border" variant='info' />
+                    ) : (
+                        <input 
+                            type='submit' 
+                            className='btn btn-info col-5' 
+                            value="Sign up" 
+                            data-bs-theme="dark"
+                        />
+                    )
+                }
             </form>
         </div>
     );

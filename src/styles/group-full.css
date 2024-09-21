@@ -6,19 +6,23 @@
 }
 
 .group-link {
-    color: white;
-    padding-left: 25px;
-    padding-right: 25px;
-    padding-top: 12px;
-    padding-bottom: 12px;
+    color:  white;
     border-radius: 30px;
     color: white;
     text-decoration: none;
-    background-color: rgba(52, 58, 63, 0.644);
     border-color: rgba(52, 58, 63, 0.644);
     transition: background-color 0.5s ease;
-    height: 50px;
-    display: block;
+    height: 45px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.group-link-not-active {
+    background-color: rgba(52, 58, 63, 0.644);
+}
+
+.group-link-active {
+    background-color: rgba(100, 112, 122, 0.644);
 }
 
 .group-btn {

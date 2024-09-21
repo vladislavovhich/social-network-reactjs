@@ -30,7 +30,7 @@ export const UserTop: React.FC<Props> = (props) => {
                             )
                         }
                         <div>
-                            <Link to="/profile" className='user-link ms-2'>
+                            <Link to={`/profile/${props.userId}`} className='user-link ms-2'>
                                 {props.username}   
                                 {
                                     props.isVerified ? (
@@ -45,7 +45,7 @@ export const UserTop: React.FC<Props> = (props) => {
                 ) : (
                     <>
                         <div>
-                            <Link to="/profile" className='user-link me-2'>
+                            <Link to={`/profile/${props.userId}`} className='user-link me-2'>
                                 {props.username}      
                             </Link>
                         </div>

@@ -4,48 +4,32 @@ import { GroupPost, SearchPostsThunkParams } from '../../types/group.types';
 import Post from './Post';
 import { faArrowDownLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getPosts as getPostsThunk } from '../../store/group-reducer';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store/store';
 
 interface Props {
     posts: GroupPost[]
     nextPage: number | null
     pageSize: number
-    sortBy: string
-    dateBy: string
     groupId: number
+    extraClass?: string
+    type?: "suggest" | "published"
+    loadPostsFunc: () => void
 }
 
 const PostList = (props: Props) => {
-    const {posts, nextPage, pageSize, sortBy, dateBy, groupId} = props
-    const dispatch = useDispatch<AppDispatch>()
+    const {posts, nextPage, loadPostsFunc, extraClass, type} = props
 
     const loadPosts = (e: React.MouseEvent<HTMLElement>) => {
-        if (!nextPage) {
-            return
-        }
-
-        const params: SearchPostsThunkParams = {
-            params: {
-                page: nextPage,
-                pageSize: pageSize,
-                date: dateBy,
-                post: sortBy
-            },
-            groupId
-        }
-
-        dispatch(getPostsThunk(params))
+       loadPostsFunc()
     }
 
     return (
-        <div className='d-flex flex-column'>
+        <div className={`d-flex flex-column ${extraClass}`}>
             {
                 posts.map((post, index) => (
                     <Post 
                         {...post} 
                         key={index.toString()} 
+                        type={type}
                         extraClass={"mt-3"}
                     />
                 ))
